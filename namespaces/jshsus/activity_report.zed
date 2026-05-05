@@ -1,0 +1,11 @@
+definition activity_report {
+    relation first_member: user
+    relation direct_member: user
+
+    permission member = direct_member + first_member
+
+    relation approver: user
+    relation owner: user
+    
+    permission editor = approver + owner
+}

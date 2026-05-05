@@ -1,0 +1,10 @@
+definition service {
+    relation child: service
+    relation actions: action
+    
+    permission access = child->access + actions->granted
+}
+
+definition action {
+    relation granted: user
+}

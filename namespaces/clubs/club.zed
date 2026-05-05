@@ -1,0 +1,13 @@
+definition club {
+    relation leader: user
+    relation subleader: user
+    relation direct_member: user
+
+    permission member = leader + subleader + direct_member
+
+    relation advisor: user
+
+    permission manager = leader + advisor
+
+    relation applicant: user
+}

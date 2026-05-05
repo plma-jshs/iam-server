@@ -1,0 +1,5 @@
+definition petition {
+    relation owner: user
+
+    permission editor = owner
+}

@@ -1,0 +1,45 @@
+syntax = "proto3";
+
+package iam;
+option go_package = "github.com/plma-jshs/iam-server/proto";
+
+message RelationTuple {
+    string object = 1;
+    string relation = 2;
+    string subject = 3;
+}
+
+message ReadRequest {
+    string object  = 1;
+    string relation = 2;
+}
+
+message ReadResponse {
+    repeated string data = 1;
+}
+
+message WriteRequest {
+    string object  = 1;
+    string relation = 2;
+    string subject   = 3;
+}
+
+message WriteResponse {
+    bool success = 1;
+}
+
+message CheckRequest {
+    string object  = 1;
+    string relation = 2;
+    string subject   = 3;
+}
+
+message CheckResponse {
+    bool allowed = 1;
+}
+
+service IAMService {
+    rpc Read(ReadRequest) returns (ReadResponse);
+    rpc Write(WriteRequest) returns (WriteResponse);
+    rpc Check(CheckRequest) returns (CheckResponse);
+}

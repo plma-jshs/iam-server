@@ -1,0 +1,10 @@
+definition dorm_room {
+    relation bed: dorm_bed
+    relation pre_assignee: user
+    
+    permission assignee = bed->assignee
+}
+
+definition dorm_bed {
+    relation assignee: user
+}

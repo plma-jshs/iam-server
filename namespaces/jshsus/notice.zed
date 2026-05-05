@@ -1,0 +1,3 @@
+definition notice {
+    relation owner: user
+}
