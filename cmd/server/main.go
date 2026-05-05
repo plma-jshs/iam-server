@@ -146,7 +146,7 @@ func (s *iamServer) Check(ctx context.Context, req *pb.CheckRequest) (*pb.CheckR
 	})
 
 	if err != nil {
-		log.Fatalf("Error: %v", err)
+		log.Printf("Error: %v", err)
 		return nil, status.Error(codes.Internal, "Failed to check relation tuples")
 	}
 
