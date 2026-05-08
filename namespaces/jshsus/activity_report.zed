@@ -1,8 +1,8 @@
 definition activity_report {
     relation first_member: user
-    relation direct_member: user
+    relation group: group
 
-    permission member = direct_member + first_member
+    permission member = group->member
 
     relation approver: user
     relation owner: user

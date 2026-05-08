@@ -1,7 +1,6 @@
 definition group {
     relation child: group
-    relation owner: user
-    relation direct_member: user
+    relation member: user
     
-    permission member = direct_member + owner + child->member
+    permission belong = member + child->member
 }

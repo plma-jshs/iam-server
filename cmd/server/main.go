@@ -28,18 +28,27 @@ type iamServer struct {
 	client *authzed.Client
 }
 
-func Dissolve(text string) (string, string, error) {
+func Dissolve(text string) (string, string, string, error) {
 	parts := strings.Split(text, ":")
 	if len(parts) != 2 {
-		return text, "", fmt.Errorf("invalid format")
+		return text, "", "", fmt.Errorf("invalid format")
 	}
-	return parts[0], parts[1], nil
+
+	subr := ""
+	
+	if strings.Contains(parts[1], "#") {
+        subParts := strings.Split(parts[1], "#")
+        parts[1] = subParts[0]
+        subr = subParts[1]
+    }
+
+	return parts[0], parts[1], subr, nil
 }
 
 func (s *iamServer) Read(ctx context.Context, req *pb.ReadRequest) (*pb.ReadResponse, error) {
 	log.Printf("Read Request: %v", req)
 
-	objectNamespace, objectId, err := Dissolve(req.Object)
+	objectNamespace, objectId, _, err := Dissolve(req.Object)
 	if err != nil {
 		return nil, status.Error(codes.InvalidArgument, fmt.Sprintf("Invalid object format: %v", err))
 	}
@@ -68,8 +77,15 @@ func (s *iamServer) Read(ctx context.Context, req *pb.ReadRequest) (*pb.ReadResp
 			return nil, err
 		}
 		
+		subjectNamespace := resp.Relationship.Subject.Object.ObjectType
 		subjectId := resp.Relationship.Subject.Object.ObjectId
-		subjects = append(subjects, subjectId)
+		subjectRelation := resp.Relationship.Subject.OptionalRelation
+
+		if subjectRelation != "" {
+			subjects = append(subjects, subjectNamespace+":"+subjectId+"#"+subjectRelation)
+		} else {
+			subjects = append(subjects, subjectNamespace+":"+subjectId)
+		}
 	}
 
 	return &pb.ReadResponse{Data: subjects}, nil
@@ -78,11 +94,11 @@ func (s *iamServer) Read(ctx context.Context, req *pb.ReadRequest) (*pb.ReadResp
 func (s *iamServer) Write(ctx context.Context, req *pb.WriteRequest) (*pb.WriteResponse, error) {
 	log.Printf("Write Request: %v", req)
 
-	objectNamespace, objectId, err := Dissolve(req.Object)
+	objectNamespace, objectId, _, err := Dissolve(req.Object)
 	if err != nil {
 		return nil, status.Error(codes.InvalidArgument, fmt.Sprintf("Invalid object format: %v", err))
 	}
-	subjectNamespace, subjectId, err := Dissolve(req.Subject)
+	subjectNamespace, subjectId, subr, err := Dissolve(req.Subject)
 	if err != nil {
 		return nil, status.Error(codes.InvalidArgument, fmt.Sprintf("Invalid subject format: %v", err))
 	}
@@ -104,6 +120,7 @@ func (s *iamServer) Write(ctx context.Context, req *pb.WriteRequest) (*pb.WriteR
 							ObjectType: subjectNamespace,
 							ObjectId:   subjectId,
 						},
+						OptionalRelation: subr,
 					},
 				},
 			},
@@ -120,11 +137,11 @@ func (s *iamServer) Write(ctx context.Context, req *pb.WriteRequest) (*pb.WriteR
 func (s *iamServer) Check(ctx context.Context, req *pb.CheckRequest) (*pb.CheckResponse, error) {
 	log.Printf("Check Request: %v", req)
 
-	objectNamespace, objectId, err := Dissolve(req.Object)
+	objectNamespace, objectId, _,  err := Dissolve(req.Object)
 	if err != nil {
 		return nil, status.Error(codes.InvalidArgument, fmt.Sprintf("Invalid object format: %v", err))
 	}
-	subjectNamespace, subjectId, err := Dissolve(req.Subject)
+	subjectNamespace, subjectId, subr, err := Dissolve(req.Subject)
 	if err != nil {
 		return nil, status.Error(codes.InvalidArgument, fmt.Sprintf("Invalid subject format: %v", err))
 	}
@@ -142,6 +159,7 @@ func (s *iamServer) Check(ctx context.Context, req *pb.CheckRequest) (*pb.CheckR
 				ObjectType: subjectNamespace,
 				ObjectId:   subjectId,
 			},
+			OptionalRelation: subr,
 		},
 	})
 

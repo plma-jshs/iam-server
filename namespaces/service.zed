@@ -2,9 +2,11 @@ definition service {
     relation child: service
     relation actions: action
     
-    permission access = child->access + actions->granted
+    permission access = child->access + actions->licensed
 }
 
 definition action {
-    relation granted: user
+    relation licensee: user | group#member
+
+    permission licensed = licensee
 }

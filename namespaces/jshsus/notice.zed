@@ -1,3 +1,5 @@
 definition notice {
     relation owner: user
+
+    permission editor = owner
 }
