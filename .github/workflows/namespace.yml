@@ -19,8 +19,7 @@ jobs:
 
       - name: Install SpiceDB CLI
         run: |
-          curl -sSL https://zed.dev/install.sh | sh
-          echo "$HOME/.zed/bin" >> $GITHUB_PATH
+          curl -sSL https://authzed.com/install.sh | sh -s -- -b /usr/local/bin
 
       - name: Validate Namespace
         run: zed validate namespaces/
