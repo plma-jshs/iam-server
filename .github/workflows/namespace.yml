@@ -17,7 +17,8 @@ jobs:
       - name: Check out code
         uses: actions/checkout@v4
 
-      - name: Validate Namespace
+      - name: Install Spicedb CLI
         uses: "authzed/action-spicedb-validate@v1"
-        with:
-          validationfile: "namespaces/"
+
+      - name: Validate Schema Folder
+        run: zed validate namespaces/
