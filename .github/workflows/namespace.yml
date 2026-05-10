@@ -20,4 +20,4 @@ jobs:
       - name: Validate Schema Folder
         uses: authzed/action-spicedb-validate@v1
         with:
-          validationfile: "namespaces/*"
+          validationfile: $(find namespaces -name "*.zed" -o -name "*.yaml")
