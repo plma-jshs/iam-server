@@ -1,0 +1,27 @@
+name: NAMESPACE VALIDATION
+on:
+  push:
+    branches: [main, rc]
+    paths:
+      - "namespaces/**"
+      - "**.zed"
+  pull_request:
+    branches: [main, rc]
+    paths:
+      - "schema/**"
+      - "**.zed"
+jobs:
+  validate-namespace:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v5
+
+      - name: Combine All Schemas into One File
+        run: |
+          find namespaces -name "*.zed" -exec cat {} + > combined_schema.zed
+
+      - name: Validate Schema
+        uses: authzed/action-spicedb-validate@v1
+        with:
+          validationfile: combined_schema.zed
