@@ -17,7 +17,12 @@ jobs:
       - name: Check out code
         uses: actions/checkout@v5
 
-      - name: Validate Schema Folder
+      - name: Combine All Schemas into One File
+        run: |
+          find namespaces -name "*.zed" -exec cat {} + > combined_schema.zed
+          find namespaces -name "*.yaml" -exec cat {} + > combined_validation.yaml
+
+      - name: Validate Schema
         uses: authzed/action-spicedb-validate@v1
         with:
-          validationfile: $(find namespaces -name "*.zed" -o -name "*.yaml")
+          validationfile: combined_validation.yaml combined_schema.zed
