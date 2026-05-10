@@ -15,7 +15,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Check out code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Validate Schema Folder
-        run: docker run --rm -v ${{ github.workspace }}:/workspace -w /workspace authzed/zed:latest validate namespaces/
+        uses: authzed/action-spicedb-validate@v1
+        with:
+          validationfile: "namespaces/*"
