@@ -20,4 +20,4 @@ jobs:
       - name: Validate Namespace
         uses: "authzed/action-spicedb-validate@v1"
         with:
-          validatefile: "namespaces/"
+          validationfile: "namespaces/"
