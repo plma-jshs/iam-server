@@ -1,0 +1,26 @@
+name: NAMESPACE VALIDATION
+on:
+  push:
+    branches: [main, rc]
+    paths:
+      - "namespaces/**"
+      - "**.zed"
+  pull_request:
+    branches: [main, rc]
+    paths:
+      - "schema/**"
+      - "**.zed"
+jobs:
+  validate-namespace:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v4
+
+      - name: Install SpiceDB CLI
+        run: |
+          curl -sSL https://zed.dev/install.sh | sh
+          echo "$HOME/.zed/bin" >> $GITHUB_PATH
+
+      - name: Validate Namespace
+        run: zed validate namespaces/
