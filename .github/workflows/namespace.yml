@@ -18,8 +18,4 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Validate Schema Folder
-        run: docker run --rm \
-          -v ${{ github.workspace }}:/workspace \
-          -w /workspace \
-          authzed/zed:latest \
-          validate namespaces/
+        run: docker run --rm -v ${{ github.workspace }}:/workspace -w /workspace authzed/zed:latest validate namespaces/
