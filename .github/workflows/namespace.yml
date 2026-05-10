@@ -13,11 +13,13 @@ on:
 jobs:
   validate-namespace:
     runs-on: ubuntu-latest
-    container:
-      image: authzed/zed:latest
     steps:
       - name: Check out code
         uses: actions/checkout@v4
 
       - name: Validate Schema Folder
-        run: zed validate namespaces/
+        run: docker run --rm \
+          -v ${{ github.workspace }}:/workspace \
+          -w /workspace \
+          authzed/zed:latest \
+          validate namespaces/
