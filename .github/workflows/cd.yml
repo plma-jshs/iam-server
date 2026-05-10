@@ -29,5 +29,6 @@ jobs:
           host: ${{ secrets.PLMA_REMOTE_HOST }}
           username: ${{ secrets.PLMA_REMOTE_USER }}
           key: ${{ secrets.PLMA_SSH_PRIVATE_KEY }}
+          port: ${{ secrets.PLMA_REMOTE_PORT }}
           source: "iam-server.exe"
           target: "/tmp"
