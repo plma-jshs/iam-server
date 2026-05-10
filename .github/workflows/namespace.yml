@@ -20,9 +20,8 @@ jobs:
       - name: Combine All Schemas into One File
         run: |
           find namespaces -name "*.zed" -exec cat {} + > combined_schema.zed
-          find namespaces -name "*.yaml" -exec cat {} + > combined_validation.yaml
 
       - name: Validate Schema
         uses: authzed/action-spicedb-validate@v1
         with:
-          validationfile: combined_validation.yaml combined_schema.zed
+          validationfile: combined_schema.zed
