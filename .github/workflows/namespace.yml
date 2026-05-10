@@ -13,12 +13,11 @@ on:
 jobs:
   validate-namespace:
     runs-on: ubuntu-latest
+    container:
+      image: authzed/zed:latest
     steps:
       - name: Check out code
         uses: actions/checkout@v4
-
-      - name: Install Spicedb CLI
-        uses: "authzed/action-spicedb-validate@v1"
 
       - name: Validate Schema Folder
         run: zed validate namespaces/
