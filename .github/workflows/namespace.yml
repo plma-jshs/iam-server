@@ -1,14 +1,9 @@
 name: NAMESPACE VALIDATION
 on:
-  push:
-    branches: [main, rc]
-    paths:
-      - "namespaces/**"
-      - "**.zed"
   pull_request:
     branches: [main, rc]
     paths:
-      - "schema/**"
+      - "namespaces/**"
       - "**.zed"
 jobs:
   validate-namespace:
