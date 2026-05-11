@@ -137,7 +137,7 @@ func (s *iamServer) Write(ctx context.Context, req *pb.WriteRequest) (*pb.WriteR
 func (s *iamServer) Check(ctx context.Context, req *pb.CheckRequest) (*pb.CheckResponse, error) {
 	log.Printf("Check Request: %v", req)
 
-	objectNamespace, objectId, _,  err := Dissolve(req.Object)
+	objectNamespace, objectId, _, err := Dissolve(req.Object)
 	if err != nil {
 		return nil, status.Error(codes.InvalidArgument, fmt.Sprintf("Invalid object format: %v", err))
 	}
@@ -175,7 +175,7 @@ func setupSchema(client *authzed.Client) {
 	ctx := context.Background()
 
 	var files []string
-	err := filepath.WalkDir("namespaces", func(path string, d os.DirEntry, err error) error {
+	_ = filepath.WalkDir("namespaces", func(path string, d os.DirEntry, err error) error {
 		if err != nil {
 			return err
 		}
@@ -195,7 +195,7 @@ func setupSchema(client *authzed.Client) {
 		mergedSchema.WriteString("\n\n")
 	}
 
-	_, err = client.WriteSchema(ctx, &v1.WriteSchemaRequest{
+	_, err := client.WriteSchema(ctx, &v1.WriteSchemaRequest{
 		Schema: mergedSchema.String(),
 	})
 	if err != nil {
