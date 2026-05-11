@@ -21,6 +21,7 @@ jobs:
           go-version: stable
 
       - name: Run golangci-lint
-        uses: golangci/golangci-lint-action@v9
+        uses: reviewdog/action-golangci-lint@v2
         with:
-          version: v2.12
+          golangci_lint_flags: "--timeout=5m"
+          reporter: github-pr-review
