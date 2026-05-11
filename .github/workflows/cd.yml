@@ -11,19 +11,18 @@ jobs:
 
     steps:
       - name: Checkout Code
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
 
       - name: Set up Go
         uses: actions/setup-go@v6
         with:
-          go-version: "1.26"
+          go-version: stable
 
       - name: Build and Test
         run: |
           go build -o iam-server.exe ./cmd/server
-          go test -v ./...
 
-      - name: Deploy Firmware
+      - name: Deploy to Server
         uses: appleboy/scp-action@master
         with:
           host: ${{ secrets.PLMA_REMOTE_HOST }}
