@@ -18,9 +18,13 @@ jobs:
         with:
           go-version: stable
 
-      - name: Build and Test
+      - name: Build
         run: |
           go build -o iam-server.exe ./cmd/server
+
+      - name: Compress all deployment files
+        run: |
+          tar -czvf deploy.tar.gz iam-server.exe namespaces/
 
       - name: Deploy to Server
         uses: appleboy/scp-action@master
@@ -29,5 +33,5 @@ jobs:
           username: ${{ secrets.PLMA_REMOTE_USER }}
           key: ${{ secrets.PLMA_SSH_PRIVATE_KEY }}
           port: ${{ secrets.PLMA_REMOTE_PORT }}
-          source: "iam-server.exe"
+          source: "iam-server.exe, namespaces.tar.gz"
           target: "/tmp"
